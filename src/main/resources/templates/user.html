@@ -1,17 +1,142 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Show</title>
+    <title>Spring Security Example</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        #table-container {
+            flex-grow: 1;
+        }
+        table {
+            width: 100%;
+        }
+        th, td {
+            border: solid black;
+        }
+    </style>
+    <style>
+
+        .table-container table {
+            display: none;
+        }
+        .table-container.active table {
+            display: table;
+        }
+    </style>
+    <style>
+        .list-group-item.active {
+            background-color: blue;
+            color: white;
+        }
+    </style>
+    <style>
+        .custom-navbar {
+            background-color: #343a40;
+            color: white;
+        }
+    </style>
+    <style>
+        .sidebar {
+            width: 500px;
+            background-color: #fdfdfe;
+        }
+        .content {
+
+        }
+    </style>
+    <style>
+        html,
+        body{
+            height: 100%;
+            margin: 0;
+            padding: 0px;
+        }
+        #sidebar-wrapper {
+            height: 100vh;
+        }
+    </style>
+    <style>
+        #wrapper {
+            display: flex;
+            flex-direction: row;
+        }
+        #page-content-wrapper {
+            flex-grow: 1;
+            padding: 30px;
+            background-color: white;
+        }
+    </style>
+
+
 </head>
 <body>
-<p th:text="${'Id: ' + user.getId()}">VALUE</p>
-<p th:text="${'Username:' + user.getUsername()}">VALUE</p>
-<p th:text="${'Age: ' + user.getAge()}">VALUE</p>
-<p th:text="${'Email: ' + user.getEmail()}">VALUE</p>
+<nav class="navbar navbar-expand-lg custom-navbar">
+    <span class="navbar-brand" th:text="${aloneUser.username}" style="display: inline">Username</span> with roles:
+    <span th:each="role : ${aloneUser.roles}" style="display: inline; vertical-align: middle">
+        <span th:text="${role.role}"></span>
+        <span style="white-space: pre"></span>
+    </span>
+    <button class="btn btn-primary ml-auto" onclick="window.location.href='logout'">Logout</button>
+</nav>
 
-<form th:action="@{/logout}" th:method="POST">
-    <input type="submit" value="Logout">
-</form>
+<div class="d-flex" id="wrapper">
+    <!--Боковая часть страницы-->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action" onclick="toggleTable(this)">User</a>
+        </div>
+    </div>
+
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <h2>User information-page</h2>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">About User</h3>
+                </div>
+
+                <div class="panel-body table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Roles</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="${aloneUser2.username}">Username</td>
+                            <td th:text="${aloneUser2.age}">Age</td>
+                            <td th:text="${aloneUser2.email}">Email</td>
+                            <td>
+                                <span th:each="role : ${aloneUser2.role}" th:text="${role.getRole()} + '; '">
+                                    <span th:text="${role.role}"></span>Role<span></span>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        function toggleTable(link) {
+            var tableContainer = document.querySelector('.table-container');
+            var userLink = document.querySelector('.list-group-item');
+            tableContainer.classList.toggle('active');
+            userLink.classList.toggle('active');
+        }
+    </script>
+
 </body>
 </html>

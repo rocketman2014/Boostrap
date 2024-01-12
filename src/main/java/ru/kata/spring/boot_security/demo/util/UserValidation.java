@@ -27,7 +27,7 @@ public class UserValidation implements Validator {
         User user = (User) target;
         User userExist;
         try {
-            userExist = userDevServ.loadUserByUsername(user.getUsername());
+            userExist = (User) userDevServ.loadUserByUsername(user.getUsername());
         } catch (UsernameNotFoundException ignored) {
             return;
         }
@@ -37,4 +37,3 @@ public class UserValidation implements Validator {
                 "Человек с таким именем пользователя уже существует");
     }
 }
-

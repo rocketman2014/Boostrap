@@ -1,28 +1,32 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UsersDetailService;
 
+import java.security.Principal;
+
 @Controller
-public class AllController {
+@RequestMapping("/user")
+public class UserController {
     private final UsersDetailService userService;
 
     @Autowired
-    public AllController(UsersDetailService userService) {
+    public UserController(UsersDetailService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/user")
-    public String show(Model model, Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User curretUser = userService.loadUserByUsername(userDetails.getUsername());
-        model.addAttribute("user", curretUser);
+    @GetMapping
+    public String userInfo(Principal principal, Model model) {
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        model.addAttribute("aloneUser", user);
+        model.addAttribute("aloneUser2", user);
+
         return "user";
     }
 
