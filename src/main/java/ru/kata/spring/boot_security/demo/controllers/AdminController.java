@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,6 +14,7 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UsersDetailService;
+import ru.kata.spring.boot_security.demo.util.UserValidation;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -25,13 +27,14 @@ import java.util.List;
 public class AdminController {
     private final UsersDetailService userService;
     private final RoleRepository roleRepository;
+    private final UserValidation userValidation;
 
 
     @Autowired
-    public AdminController(UsersDetailService userService, RoleRepository roleRepository) {
+    public AdminController(UsersDetailService userService, RoleRepository roleRepository, UserValidation userValidation) {
         this.userService = userService;
         this.roleRepository = roleRepository;
-
+        this.userValidation = userValidation;
     }
 
     @GetMapping
@@ -52,7 +55,7 @@ public class AdminController {
         model.addAttribute("rolesList", list);
 
         //добавление нового юзера
-        User user1 = new User ();
+        User user1 = new User();
         model.addAttribute("newUser", user1);
         return "all_user";
     }
@@ -64,13 +67,25 @@ public class AdminController {
     }
 
     @PostMapping("/updateInfo")
-    public String updateUser(@ModelAttribute("oneUser") @Valid User user) {
+    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
+        userValidation.validate(user, bindingResult);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", roleRepository.findAll());
+            return "redirect:/admin";
+        }
+
         userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("newUser") User user) {
+    public String saveUser(@ModelAttribute("newUser") @Valid User user, BindingResult bindingResult, Model model) {
+        userValidation.validate(user, bindingResult);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("newUser", roleRepository.findAll());
+            return "redirect:/admin";
+        }
+
         userService.saveUser(user);
         return "redirect:/admin";
     }

@@ -7,7 +7,6 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
-
 <!-- верхняя навигация с logout -->
 <header>
     <nav class="navbar navbar-light bg-dark" style="height: 7vh">
@@ -23,7 +22,9 @@
                 </div>
                 <div class="text-white me-auto d-inline-block">
                     <span class="text- white" style="font-size: 1.5em"
-                          th:each="role : ${thisUser.roles}" th:utext="${thisUser.username}">
+                          th:each="role : ${thisUser.roles}"
+                          th:value="${role.id}"
+                          th:text="${role.role}">
                         USER
                     </span>
                 </div>
@@ -190,8 +191,9 @@
                         <div class="card-body" style="display: flex; align-items: center; justify-content: center">
                             <form th:method="POST" th:action="@{/admin/saveUser}" th:object="${newUser}" style="flex: auto; max-width: 30%">
                                 <div style="width: 100%; display: flex; flex-direction: column;  align-items: center; justify-content: center">
-                                    <h6 for="username" class="card-title" style="margin: 5px 0; text-align: center">Username</h6>
+                                    <h6 class="card-title" style="margin: 5px 0; text-align: center">Username</h6>
                                     <input required style="background-color: khaki" type="text" th:field="${newUser.username}" id="username" class="form-control" placeholder="username">
+                                    <div style="color: red" th:if="${#fields.hasErrors()}" th:errors="*{username}">Error Username</div>
                                     <h6 class="card-title" style="margin: 5px 0; text-align: center">Age</h6>
                                     <input required style="background-color: khaki" type="number" th:field="${newUser.age}" id="age" class="form-control" placeholder="age">
                                     <h6 class="card-title" style="margin: 5px 0; text-align: center">Email</h6>
