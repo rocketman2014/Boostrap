@@ -25,7 +25,6 @@ public class UserController {
         String username = principal.getName();
         User user = userService.findByUsername(username);
         model.addAttribute("aloneUser", user);
-        model.addAttribute("aloneUser2", user);
 
         return "user";
     }

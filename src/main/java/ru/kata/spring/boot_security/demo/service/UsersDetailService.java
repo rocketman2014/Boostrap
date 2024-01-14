@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -13,12 +12,10 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
 
-
 @Service
 @Transactional(readOnly = true)
 public class UsersDetailService implements UserDetailsService {
     private final UserRepository userRepository;
-
 
     @Autowired
     public UsersDetailService(UserRepository userRepository) {
@@ -44,7 +41,6 @@ public class UsersDetailService implements UserDetailsService {
     public void delById(int id) {
         userRepository.deleteById((long) id);
     }
-
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
