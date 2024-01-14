@@ -29,7 +29,6 @@ public class AdminController {
     private final RoleRepository roleRepository;
     private final UserValidation userValidation;
 
-
     @Autowired
     public AdminController(UsersDetailService userService, RoleRepository roleRepository, UserValidation userValidation) {
         this.userService = userService;
